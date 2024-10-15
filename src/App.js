@@ -1,10 +1,10 @@
-import LogicFormulaBuilder from './components/LogicFormulaBuilder';
+import Header from './components/Header';
 import './App.css';
 
 function App() {
   return (
       <div  className="App">
-          <LogicFormulaBuilder />
+        <Header />
       </div>
   );
 }
