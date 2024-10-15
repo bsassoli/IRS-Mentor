@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "logic-formula-builder"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "logic-formula-builder-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
