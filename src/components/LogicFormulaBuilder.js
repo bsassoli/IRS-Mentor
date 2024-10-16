@@ -3,6 +3,7 @@ import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { useProblems } from '../hooks/useProblems';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import { normalizeFormula } from '../utils/formulaUtils';
 import Header from './Header';
 import ButtonGrid from './ButtonGrid';
 
@@ -14,12 +15,11 @@ const LogicFormulaBuilder = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
-  
   const { darkMode } = useDarkMode();
-  const { 
-    currentProblem, 
-    nextProblem, 
-    problems, 
+  const {
+    currentProblem,
+    nextProblem,
+    problems,
     currentProblemIndex
   } = useProblems();
 
@@ -43,7 +43,11 @@ const LogicFormulaBuilder = () => {
 
   const checkSolution = () => {
     const userSolution = latexFormula.trim();
-    if (currentProblem.solution.includes(userSolution)) {
+    const userSolutionNormalized = normalizeFormula(userSolution);
+    const correctAnswers = currentProblem.solution.map(normalizeFormula);
+    console.log('User Solution:', userSolutionNormalized);
+    console.log('Correct Answers:', correctAnswers);
+    if (correctAnswers.includes(userSolutionNormalized)) {
       setIsSuccess(true);
       setModalMessage('Ottimo lavoro! Passando alla prossima domanda...');
       setCorrectAnswers(prev => prev + 1);
