@@ -53,3 +53,4 @@ yarn-error.log*
 .history
 .ionide
 
+gen_ids.py
