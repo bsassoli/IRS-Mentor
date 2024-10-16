@@ -1,13 +1,20 @@
+import React from 'react';
 import Header from './components/Header';
-import './App.css';
+import LogicFormulaBuilder from './components/LogicFormulaBuilder';
+import { DarkModeProvider } from './contexts/DarkModeContext';
 
-function App() {
+const App = () => {
   return (
-      <div  className="App">
+    <DarkModeProvider>
+      <div className="min-h-screen transition-colors duration-300">
         <Header />
+        <LogicFormulaBuilder />
       </div>
+    </DarkModeProvider>
   );
-}
- export default App;
+};
+
+export default App;
+
 
 

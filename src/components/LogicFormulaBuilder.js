@@ -1,264 +1,184 @@
-import React, { useState, useEffect } from "react";
-import { InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue } from "firebase/database";
-
-// App's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBC1_APAcXHzW5bEZ_o6RZO1jp1ew7RAz4",
-  authDomain: "fbf-2024.firebaseapp.com",
-  databaseURL:
-    "https://fbf-2024-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "fbf-2024",
-  storageBucket: "fbf-2024.appspot.com",
-  messagingSenderId: "75025781037",
-  appId: "1:75025781037:web:939484d96d65e369e903a4",
-  measurementId: "G-J1EV200L67",
-};
-
-// Initialize Firebase
-let app;
-try {
-  app = initializeApp(firebaseConfig);
-} catch (error) {
-  console.error("Firebase initialization error", error);
-}
+import React, { useState } from 'react';
+import { InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+import { useProblems } from '../hooks/useProblems';
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 const LogicFormulaBuilder = () => {
   const [formula, setFormula] = useState([]);
-  const [latexFormula, setLatexFormula] = useState("");
+  const [latexFormula, setLatexFormula] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
-  const [problems, setProblems] = useState([]);
-  const [error, setError] = useState(null);
-
-  const connectives = [
-    { id: "not", latex: "\\neg" },
-    { id: "and", latex: "\\land" },
-    { id: "or", latex: "\\lor" },
-    { id: "implies", latex: "\\to" },
-    { id: "iff", latex: "\\leftrightarrow" },
-  ];
-
-  const propositionalVariables = [
-    { id: "P", latex: "P" },
-    { id: "Q", latex: "Q" },
-    { id: "R", latex: "R" },
-    { id: "S", latex: "S" },
-    { id: "(", latex: "(" },
-    { id: ")", latex: ")" },
-    { id: ",", latex: "," },
-   
-  ];
-
-  useEffect(() => {
-    if (!app) {
-      setError("Firebase not initialized. Check your configuration.");
-      return;
-    }
-
-    const database = getDatabase(app);
-    const problemsRef = ref(database, "problems");
-
-    const unsubscribe = onValue(
-      problemsRef,
-      (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          setProblems(Object.values(data));
-          setError(null);
-        } else {
-          setError("No problems found in the database.");
-        }
-      },
-      (error) => {
-        setError("Error fetching problems: " + error.message);
-      }
-    );
-
-    // Cleanup function
-    return () => unsubscribe();
-  }, []);
-
-  const currentProblem = problems[currentProblemIndex] || {
-    text: "Carico...",
-    solution: "",
-  };
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [totalAnswered, setTotalAnswered] = useState(0);
+  
+  const { darkMode } = useDarkMode();
+  const { currentProblem, nextProblem, problems, currentProblemIndex } = useProblems();
 
   const addToFormula = (element) => {
     setFormula([...formula, element]);
-    setLatexFormula((prevFormula) => prevFormula + " " + element.latex);
+    setLatexFormula(prevFormula => prevFormula + ' ' + element.latex);
   };
 
   const resetFormula = () => {
     setFormula([]);
-    setLatexFormula("");
+    setLatexFormula('');
   };
 
   const backspace = () => {
     if (formula.length > 0) {
       const newFormula = formula.slice(0, -1);
       setFormula(newFormula);
-      setLatexFormula(newFormula.map((f) => f.latex).join(""));
+      setLatexFormula(newFormula.map(f => f.latex).join(' '));
     }
   };
 
   const checkSolution = () => {
+    setTotalAnswered(prev => prev + 1);
     if (latexFormula.trim() === currentProblem.solution) {
       setIsSuccess(true);
-      setModalMessage("Ottimo lavoro!");
-      resetFormula();
+      setModalMessage('Ottimo lavoro! Premi "Prossimo problema" per continuare.');
+      setCorrectAnswers(prev => prev + 1);
     } else {
       setIsSuccess(false);
-      setModalMessage("La tua risposta non è corretta. Riprova!");
-      resetFormula();
+      setModalMessage('La tua risposta non è corretta. Riprova!');
     }
     setModalOpen(true);
   };
 
-  const nextProblem = () => {
-    if (problems.length > 0) {
-      setCurrentProblemIndex((prevIndex) => (prevIndex + 1) % problems.length);
-      resetFormula();
-    }
+  const handleNextProblem = () => {
+    nextProblem();
+    resetFormula();
+    setModalOpen(false);
   };
 
-  return (
-    <div>
-      <main className="flex-grow p-8 flex flex-col items-center">
-        <div className="w-full max-w-4xl">
-          <div className="mb-6">
-            <div className="flex items-center bg-gray-800 rounded-lg overflow-hidden">
-              <div className="flex-grow bg-transparent p-4 text-white outline-none">
-                <InlineMath
-                  math={latexFormula || "\\text{...}"}
-                />
-              </div>
-              <button className="p-4 bg-gray-700 text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-              </button>
-              <button className="p-4 bg-gray-700 text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+  const connectives = [
+    { id: 'not', latex: '\\neg' },
+    { id: 'and', latex: '\\land' },
+    { id: 'or', latex: '\\lor' },
+    { id: 'implies', latex: '\\to' },
+    { id: 'iff', latex: '\\leftrightarrow' },
+  ];
 
-          <div className="grid grid-cols-6 gap-2 mb-6">
-            {[...propositionalVariables, ...connectives].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => addToFormula(item)}
-                className="p-4 bg-gray-800 rounded-lg text-white text-xl hover:bg-gray-700 transition-colors"
-              >
-                <InlineMath math={item.latex} />
-              </button>
-            ))}
+  const propositionalVariables = [
+    { id: 'P', latex: 'P' },
+    { id: 'Q', latex: 'Q' },
+    { id: 'R', latex: 'R' },
+    { id: 'S', latex: 'S' },
+  ];
+
+  const otherSymbols = [
+    { id: '(', latex: '(' },
+    { id: ')', latex: ')' },
+    { id: ',', latex: ',' },
+  ];
+
+  const renderButtons = (elements) => (
+    elements.map((item) => (
+      <button
+        key={item.id}
+        onClick={() => addToFormula(item)}
+        className="p-3 bg-blue-600 rounded-lg text-white text-lg hover:bg-blue-700 transition-colors flex-1"
+      >
+        <InlineMath math={item.latex} />
+      </button>
+    ))
+  );
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* Progress Tracker */}
+      <section className="mb-8 bg-gray-100 p-4 rounded-lg shadow-md flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-800">Progresso</h2>
+        <div className="text-lg">
+          <span className="font-bold text-green-600">{correctAnswers}</span>
+          <span className="text-gray-600"> corrette su </span>
+          <span className="font-bold text-blue-600">{totalAnswered}</span>
+          <span className="text-gray-600"> totali</span>
+        </div>
+        <div className="text-lg">
+          <span className="text-gray-600">Domanda </span>
+          <span className="font-bold text-blue-600">{currentProblemIndex + 1}</span>
+          <span className="text-gray-600"> di </span>
+          <span className="font-bold text-blue-600">{problems.length}</span>
+        </div>
+      </section>
+
+      {/* Problem Display Section */}
+      <section className="mb-8 bg-gray-100 p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Problema</h2>
+        <p className="text-lg text-gray-700">{currentProblem.text}</p>
+      </section>
+
+      {/* Formula Output Section */}
+      <section className="mb-8 bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">La tua formula</h2>
+        <div className="bg-gray-100 p-4 rounded-lg min-h-[60px] flex items-center justify-center">
+          <InlineMath math={latexFormula || '\\text{La tua formula apparirà qui}'} />
+        </div>
+      </section>
+
+      {/* Button Grid Section */}
+      <section className="mb-8 bg-gray-100 p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Costruisci la tua formula</h2>
+        <div className="space-y-4">
+          <div className="flex justify-between gap-2">
+            {renderButtons(connectives)}
+          </div>
+          <div className="flex justify-between gap-2">
+            {renderButtons(propositionalVariables)}
+          </div>
+          <div className="flex justify-between gap-2">
+            {renderButtons(otherSymbols)}
             <button
               onClick={backspace}
-              className="p-4 bg-gray-800 rounded-lg text-white text-xl hover:bg-gray-700 transition-colors"
+              className="p-3 bg-red-500 rounded-lg text-white text-lg hover:bg-red-600 transition-colors flex-1"
             >
               ⌫
             </button>
           </div>
-
-          {error ? (
-            <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-4">
-              {error}
-            </div>
-          ) : (
-            <>
-              <div className="mb-6 bg-gray-800 p-4 rounded-lg">
-                <p className="text-white">Problema: {currentProblem.text}</p>
-              </div>
-              <div className="flex justify-between gap-4">
-                <button
-                  onClick={checkSolution}
-                  className="flex-1 px-6 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                >
-                  Verifica soluzione
-                </button>
-                <button
-                  onClick={resetFormula}
-                  className="flex-1 px-6 py-3 rounded-md bg-gray-600 text-white hover:bg-gray-700 transition-colors"
-                >
-                  Cancella formula
-                </button>
-                <button
-                  onClick={nextProblem}
-                  className="flex-1 px-6 py-3 rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors"
-                >
-                  Prossimo problema
-                </button>
-              </div>
-            </>
-          )}
         </div>
-      </main>
+      </section>
 
-      <footer className="p-4 bg-gray-800 text-center text-gray-400">
-        <p>Proudly provided by Bernardino</p>
-        <p className="text-sm">Legal Notice © 2024 All rights reserved.</p>
-      </footer>
+      {/* Action Buttons Section */}
+      <section className="flex flex-col gap-4">
+        <button
+          onClick={checkSolution}
+          className="w-full p-4 bg-green-600 text-white text-xl font-bold rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Verifica soluzione
+        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={resetFormula}
+            className="flex-1 p-3 bg-gray-500 text-white text-lg rounded-lg hover:bg-gray-600 transition-colors"
+          >
+            Cancella
+          </button>
+          <button
+            onClick={handleNextProblem}
+            className="flex-1 p-3 bg-blue-500 text-white text-lg rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Prossimo problema
+          </button>
+        </div>
+      </section>
 
+      {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-          <div className="relative p-5 border w-96 shadow-lg rounded-md bg-gray-800">
-            <div
-              className={`mt-3 text-center ${
-                isSuccess ? "text-green-500" : "text-red-500"
-              }`}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <h3 className={`text-xl font-bold ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>
+              {isSuccess ? 'Ottimo lavoro!' : 'Riprova!'}
+            </h3>
+            <p className="my-4">{modalMessage}</p>
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
-              <h3 className="text-lg leading-6 font-medium mb-2">
-                {isSuccess ? "Ottimo lavoro!" : "Riprova!"}
-              </h3>
-              <div className="mt-2 px-7 py-3">
-                <p className="text-sm text-gray-300">{modalMessage}</p>
-              </div>
-              <div className="items-center px-4 py-3">
-                <button
-                  onClick={() => setModalOpen(false)}
-                  className={`px-4 py-2 ${
-                    isSuccess ? "bg-green-600" : "bg-blue-600"
-                  } text-white text-base font-medium rounded-md w-full shadow-sm hover:${
-                    isSuccess ? "bg-green-700" : "bg-blue-700"
-                  } focus:outline-none focus:ring-2 focus:ring-${
-                    isSuccess ? "green" : "blue"
-                  }-300`}
-                >
-                  Chiudi
-                </button>
-              </div>
-            </div>
+              Chiudi
+            </button>
           </div>
         </div>
       )}

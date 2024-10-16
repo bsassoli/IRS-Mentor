@@ -1,0 +1,61 @@
+{
+    "problems": {
+      "problem1": {
+        "text": "Sta piovendo.",
+        "solution": "P"
+      },
+      "problem2": {
+        "text": "Non sta piovendo.",
+        "solution": "\\neg P"
+      },
+      "problem3": {
+        "text": "O sta piovendo o sta nevicando.",
+        "solution": "P \\lor Q"
+      },
+      "problem4": {
+        "text": "Sta sia piovendo che  nevicando",
+        "solution": "P \\land Q"
+      },
+      "problem5": {
+        "text": "Sta piovendo, ma non sta nevicando.",
+        "solution": "P \\land \\neg Q"
+      },
+      "problem6": {
+        "text": "Non è vero che sta piovendo e nevicando.",
+        "solution": "\\neg(P \\land Q)"
+      },
+      "problem7": {
+        "text": "Se non sta piovendo, allora sta nevicando.",
+        "solution": "\\neg P \\to Q"
+      },
+      "problem8": {
+        "text": "Non si dà il caso che sta nevicando.",
+        "solution": "\\neg Q"
+      },
+      "problem9": {
+        "text": "Sta piovendo se e solo se non sta nevicando.",
+        "solution": "P \\leftrightarrow \\neg Q"
+      },
+      "problem10": {
+        "text": "Non sta né piovendo né nevicando.",
+        "solution": "\\neg P \\land \\neg Q"
+      },
+      "problem11": {
+        "text": "Se sta nevicando e piovendo, allora sta nevicando.",
+        "solution": "(Q \\land P) \\to Q"
+      },
+      "problem12": {
+        "text": "Se non sta piovendo, non è vero che nevica.",
+        "solution": "\\neg P \\to \\neg Q"
+      },
+      "problem13": {
+        "text": "O sta piovendo, o sta sia nevicando che piovendo.",
+        "solution": "P \\lor (Q \\land P)"
+      },
+      "problem14": {
+        "text": "O sta piovendo che nevicando, o sta nevicando ma non piovendo.",
+        "solution": "(P \\land Q) \\lor (Q \\land \\neg P)"
+      }
+    }
+  }
+  
