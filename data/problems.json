@@ -1,0 +1,265 @@
+{
+    "problems": [
+        {
+            "id": "50813714-8399-4622-b022-14be88536493",
+            "text": "Sta piovendo.",
+            "solution": "P",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "id": "417f133a-b946-44e4-81c0-eea741cdd6ad",
+            "text": "Non sta piovendo.",
+            "solution": "\\neg P",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "id": "10a37c8e-adf6-4faf-8b56-224e637586e7",
+            "text": "O sta piovendo o sta nevicando.",
+            "solution": [
+                "P \\lor Q",
+                "Q \\lor P"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Sta sia piovendo che nevicando",
+            "solution": "P \\land Q",
+            "id": "0fdc74a8-3238-4d11-801d-f60e13a7522f",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Sta piovendo, ma non sta nevicando.",
+            "solution": "P \\land \\neg Q",
+            "id": "ba9bb6a2-3e76-4c18-b5d3-66ff67f558f2",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Non \u00e8 vero che sta sia piovendo che nevicando.",
+            "solution": [
+                "\\neg(P \\land Q)",
+                "\\neg (Q \\land P)"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "id": "c0e2081f-8619-48b1-af59-2de3e500113d",
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Se non sta piovendo, allora sta nevicando.",
+            "solution": "\\neg P \\to Q",
+            "id": "6bcffbf4-0744-4c64-bf7a-59d93bb57878",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Non si d\u00e0 il caso che, se sta piovendo, allora sta nevicando.",
+            "solution": "\\neg (P \\to Q)",
+            "id": "884296d8-0101-4ca4-8de9-07ae26f1e474",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Non si d\u00e0 il caso che, se sta nevicando, allora sta piovendo.",
+            "solution": "\\neg (Q \\to P)",
+            "id": "795527f8-5dd3-402b-86ad-1711ed0f715b",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Non sta n\u00e9 piovendo n\u00e9 nevicando.",
+            "solution": [
+                "\\neg P \\land \\neg Q",
+                "\\neg (P \\lor Q)",
+                "\\neg (Q \\lor P)",
+                "\\neg Q \\land \\neg P"
+            ],
+            "id": "e3341d42-6fcc-4c19-9776-d0c16b669f3e",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Se sta nevicando e piovendo, allora sta nevicando.",
+            "solution": [
+                "(Q \\land P) \\to Q",
+                "(P \\land Q) \\to Q"
+            ],
+            "id": "e29c19a3-8804-4ccd-93a4-2323a37a25b3",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Se non sta piovendo, non \u00e8 vero che nevica.",
+            "solution": "\\neg P \\to \\neg Q",
+            "id": "3755ed60-8d52-4d29-9591-b3a926a63722",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "O sta piovendo, o sta sia nevicando che piovendo.",
+            "solution": [
+                "P \\lor (Q \\land P)",
+                "P \\lor (P \\land Q)"
+            ],
+            "id": "24f0216b-77f2-46ca-be74-5ee9e8f7bc5b",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "O sta sia piovendo che nevicando, o sta nevicando ma non piovendo.",
+            "solution": "(P \\land Q) \\lor (Q \\land \\neg P)",
+            "id": "5dcc8cd0-37ba-45b3-9263-71caf0359883",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sta piovendo"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Sta nevicando"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
+            "text": "Se sono un nerd, allora se studio logica mi diverto",
+            "solution": "P\\to(Q\\toR)",
+            "id": "cb790070-462d-4f55-9fda-ce5198388d2a",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Sono un nerd"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Studio logica"
+                },
+                {
+                    "variable": "R",
+                    "text": "Mi diverto"
+                }
+            ],
+            "type": "translateToLogic"
+        }
+    ]
+}
