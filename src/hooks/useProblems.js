@@ -1,9 +1,8 @@
-// hooks/useProblems.js
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-// Firebase configuration
+// Firebase configuration using environment variables
 const firebaseConfig = {
   apiKey: "AIzaSyBC1_APAcXHzW5bEZ_o6RZO1jp1ew7RAz4",
   authDomain: "fbf-2024.firebaseapp.com",
@@ -15,14 +14,6 @@ const firebaseConfig = {
   measurementId: "G-J1EV200L67"
 };
 
-// Initialize Firebase
-let app;
-try {
-  app = initializeApp(firebaseConfig);
-} catch (error) {
-  console.error("Firebase initialization error", error);
-}
-
 export const useProblems = () => {
   const [problems, setProblems] = useState([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
@@ -30,35 +21,49 @@ export const useProblems = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!app) {
-      setError("Firebase not initialized. Check your configuration.");
+    let app;
+    try {
+      app = initializeApp(firebaseConfig);
+    } catch (error) {
+      console.error("Firebase initialization error", error);
+      setError("Firebase initialization error: " + error.message);
       setLoading(false);
       return;
     }
 
     const database = getDatabase(app);
-    const problemsRef = ref(database, 'problems');
-
-    const unsubscribe = onValue(problemsRef, (snapshot) => {
+    const dataRef = ref(database, 'problems');
+    const unsubscribe = onValue(dataRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
-        const problemsArray = Object.values(data);
+      if (data && Array.isArray(data)) {
+        const problemsArray = data.map(problem => ({
+          ...problem,
+          solution: Array.isArray(problem.solution) ? problem.solution : [problem.solution],
+          variables: problem.variables.reduce((acc, v) => {
+            acc[v.variable] = v.text;
+            return acc;
+          }, {})
+        }));
         setProblems(problemsArray);
         setError(null);
       } else {
-        setError("No problems found in the database.");
+        setError("No valid problems found in the database.");
       }
       setLoading(false);
     }, (error) => {
-      setError("Error fetching problems: " + error.message);
+      setError("Error fetching data: " + error.message);
       setLoading(false);
     });
 
-    // Cleanup function
     return () => unsubscribe();
   }, []);
 
-  const currentProblem = problems[currentProblemIndex] || { text: 'Caricamento...', solution: '' };
+  const currentProblem = problems[currentProblemIndex] || { 
+    text: 'Caricamento...', 
+    solution: [], 
+    id: null,
+    variables: {}
+  };
 
   const nextProblem = () => {
     if (problems.length > 0) {
@@ -70,12 +75,20 @@ export const useProblems = () => {
     setCurrentProblemIndex(0);
   };
 
+  const getRandomProblem = () => {
+    if (problems.length > 0) {
+      const randomIndex = Math.floor(Math.random() * problems.length);
+      setCurrentProblemIndex(randomIndex);
+    }
+  };
+
   return {
     problems,
     currentProblem,
     currentProblemIndex,
     nextProblem,
     resetProblems,
+    getRandomProblem,
     error,
     loading
   };

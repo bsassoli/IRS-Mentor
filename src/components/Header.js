@@ -20,7 +20,7 @@ const Header = () => {
               e.target.src = '/images/fallback-logo.png';
             }}
           />
-          <h1 className="text-3xl font-['EB_Garamond'] font-bold text-blue-800">IRS TUTOR</h1>
+          <h1 className={`text-3xl font-['EB_Garamond'] font-bold ${darkMode ? 'text-blue-100' : 'text-blue-800'}`}>IRS TUTOR</h1>
         </div>
         <button
           onClick={toggleDarkMode}

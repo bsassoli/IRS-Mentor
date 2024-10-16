@@ -1,19 +1,22 @@
 {
     "problems": {
       "problem1": {
+        "id": 1,
         "text": "Sta piovendo.",
         "solution": "P"
       },
       "problem2": {
+        "id": 2,
         "text": "Non sta piovendo.",
         "solution": "\\neg P"
       },
       "problem3": {
+        "id": 3,
         "text": "O sta piovendo o sta nevicando.",
         "solution": "P \\lor Q"
       },
       "problem4": {
-        "text": "Sta sia piovendo che  nevicando",
+        "text": "Sta sia piovendo che nevicando",
         "solution": "P \\land Q"
       },
       "problem5": {
@@ -29,12 +32,12 @@
         "solution": "\\neg P \\to Q"
       },
       "problem8": {
-        "text": "Non si dà il caso che sta nevicando.",
-        "solution": "\\neg Q"
+        "text": "Non si dà il caso che, se sta piovendo, allora sta nevicando.",
+        "solution": "\\neg (P \\to Q)"
       },
       "problem9": {
-        "text": "Sta piovendo se e solo se non sta nevicando.",
-        "solution": "P \\leftrightarrow \\neg Q"
+        "text": "Non si dà il caso che, se sta nevicando, allora sta piovendo.",
+        "solution": "\\neg (Q \\leftrightarrow \\ P"
       },
       "problem10": {
         "text": "Non sta né piovendo né nevicando.",
