@@ -1,3 +1,7 @@
+// src/components/Modal.js
+// Description: This component displays a modal with a message and a button to close it.
+
+
 import React from 'react';
 
 const Modal = ({ isOpen, onClose, message, isSuccess }) => {

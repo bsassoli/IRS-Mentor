@@ -1,3 +1,6 @@
+// src/components/Header.js
+// Description: This component is the header of the application. It displays the logo and a button to toggle dark mode.
+
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useDarkMode } from '../contexts/DarkModeContext';

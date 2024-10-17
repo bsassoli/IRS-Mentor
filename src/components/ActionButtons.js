@@ -1,3 +1,6 @@
+// src/components/ActionButtons.js
+// Description: This component displays the action buttons to check the solution, reset the formula, and move to the next problem.
+
 import React from 'react';
 
 const ActionButtons = ({ checkSolution, resetFormula, nextProblem }) => (

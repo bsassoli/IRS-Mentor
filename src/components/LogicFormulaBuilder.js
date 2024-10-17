@@ -1,3 +1,6 @@
+// src/components/LogicFormulaBuilder.js
+// Desc: This component is the main component for the logic formula builder. It contains the logic for building the formula, checking the solution, and displaying the progress of the user.
+
 import React, { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';

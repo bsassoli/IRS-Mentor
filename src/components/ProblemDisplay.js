@@ -1,3 +1,6 @@
+// src/components/ProblemDisplay.js
+// Description: This component displays the problem text.
+
 import React from 'react';
 
 const ProblemDisplay = ({ problem }) => (

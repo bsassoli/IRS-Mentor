@@ -1,8 +1,11 @@
+// src/hooks/useProblems.js
+// Description: This custom hook fetches the problems from the Firebase database and provides the current problem, next problem, and random problem functionality.
+
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-// Firebase configuration using environment variables
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBC1_APAcXHzW5bEZ_o6RZO1jp1ew7RAz4",
   authDomain: "fbf-2024.firebaseapp.com",

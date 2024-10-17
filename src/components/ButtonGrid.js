@@ -1,3 +1,6 @@
+// src/components/ButtonGrid.js
+// Description: This component displays the buttons to add connectives, propositional variables, and other symbols to the formula input.
+
 import React from 'react';
 import { InlineMath } from 'react-katex';
 

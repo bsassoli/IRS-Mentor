@@ -1,3 +1,6 @@
+// src/components/FormulaInput.js
+// Description: This component displays the LaTeX formula input by the user.
+
 import React from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';

@@ -1,3 +1,6 @@
+// src/contexts/DarkModeContext.js
+// Description: This file contains the context and provider for the dark mode state.
+
 import React, { createContext, useState, useContext } from 'react';
 
 const DarkModeContext = createContext();

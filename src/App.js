@@ -1,3 +1,5 @@
+// src/App.js
+
 import React from 'react';
 import LogicFormulaBuilder from './components/LogicFormulaBuilder';
 import { DarkModeProvider } from './contexts/DarkModeContext';
