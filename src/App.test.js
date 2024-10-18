@@ -1,8 +1,16 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+// Mock any context providers or components that the App component might depend on
+jest.mock('./contexts/DarkModeContext', () => ({
+  DarkModeProvider: ({ children }) => <div>{children}</div>,
+}));
+
+jest.mock('./components/ProblemDispatcher', () => () => <div>Problem Dispatcher</div>);
+
+test('renders App component without crashing', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const problemDispatcherElement = screen.getByText(/Problem Dispatcher/i);
+  expect(problemDispatcherElement).toBeInTheDocument();
 });

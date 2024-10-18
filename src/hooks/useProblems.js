@@ -1,7 +1,4 @@
-// src/hooks/useProblems.js
-// Description: This custom hook fetches the problems from the Firebase database and provides the current problem, next problem, and random problem functionality.
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
@@ -36,24 +33,30 @@ export const useProblems = () => {
 
     const database = getDatabase(app);
     const dataRef = ref(database, 'problems');
+
     const unsubscribe = onValue(dataRef, (snapshot) => {
       const data = snapshot.val();
-      if (data && Array.isArray(data)) {
-        const problemsArray = data.map(problem => ({
+      console.log("Raw data from Firebase:", data);
+
+      if (data && typeof data === 'object') {
+        const problemsArray = Object.values(data).map(problem => ({
           ...problem,
           solution: Array.isArray(problem.solution) ? problem.solution : [problem.solution],
-          variables: problem.variables.reduce((acc, v) => {
+          variables: problem.variables ? problem.variables.reduce((acc, v) => {
             acc[v.variable] = v.text;
             return acc;
-          }, {})
+          }, {}) : {}
         }));
+        console.log("Processed problems array:", problemsArray);
         setProblems(problemsArray);
         setError(null);
       } else {
+        console.error("Invalid data structure:", data);
         setError("No valid problems found in the database.");
       }
       setLoading(false);
     }, (error) => {
+      console.error("Firebase data fetching error:", error);
       setError("Error fetching data: " + error.message);
       setLoading(false);
     });
@@ -61,29 +64,35 @@ export const useProblems = () => {
     return () => unsubscribe();
   }, []);
 
+  const nextProblem = useCallback(() => {
+    console.log("Next problem function called");
+    console.log("Current index:", currentProblemIndex);
+    console.log("Total problems:", problems.length);
+    setCurrentProblemIndex((prevIndex) => {
+      const newIndex = (prevIndex + 1) % problems.length;
+      console.log("New index:", newIndex);
+      return newIndex;
+    });
+  }, [problems.length, currentProblemIndex]);
+
   const currentProblem = problems[currentProblemIndex] || { 
     text: 'Caricamento...', 
     solution: [], 
     id: null,
-    variables: {}
+    variables: {},
+    type: 'loading'
   };
 
-  const nextProblem = () => {
-    if (problems.length > 0) {
-      setCurrentProblemIndex((prevIndex) => (prevIndex + 1) % problems.length);
-    }
-  };
-
-  const resetProblems = () => {
+  const resetProblems = useCallback(() => {
     setCurrentProblemIndex(0);
-  };
+  }, []);
 
-  const getRandomProblem = () => {
+  const getRandomProblem = useCallback(() => {
     if (problems.length > 0) {
       const randomIndex = Math.floor(Math.random() * problems.length);
       setCurrentProblemIndex(randomIndex);
     }
-  };
+  }, [problems]);
 
   return {
     problems,
