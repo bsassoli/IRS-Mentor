@@ -1,7 +1,7 @@
 {
     "problems": [
         {
-            "id": "50813714-8399-4622-b022-14be88536493",
+            "id": "ebd16da0-d0a8-4961-abb8-2b9d1500cb8c",
             "text": "Sta piovendo.",
             "solution": "P",
             "variables": [
@@ -17,7 +17,7 @@
             "type": "translateToLogic"
         },
         {
-            "id": "417f133a-b946-44e4-81c0-eea741cdd6ad",
+            "id": "1671e0c5-6db0-4356-979a-2b9132066392",
             "text": "Non sta piovendo.",
             "solution": "\\neg P",
             "variables": [
@@ -33,7 +33,7 @@
             "type": "translateToLogic"
         },
         {
-            "id": "10a37c8e-adf6-4faf-8b56-224e637586e7",
+            "id": "3244f99c-3b20-4eb9-93ab-4b6b539b3563",
             "text": "O sta piovendo o sta nevicando.",
             "solution": [
                 "P \\lor Q",
@@ -54,7 +54,7 @@
         {
             "text": "Sta sia piovendo che nevicando",
             "solution": "P \\land Q",
-            "id": "0fdc74a8-3238-4d11-801d-f60e13a7522f",
+            "id": "0a3ef051-4f91-4216-9d2e-ce9e8a06547f",
             "variables": [
                 {
                     "variable": "P",
@@ -70,7 +70,7 @@
         {
             "text": "Sta piovendo, ma non sta nevicando.",
             "solution": "P \\land \\neg Q",
-            "id": "ba9bb6a2-3e76-4c18-b5d3-66ff67f558f2",
+            "id": "8110fd9f-dc94-48cb-bffc-37d67414182b",
             "variables": [
                 {
                     "variable": "P",
@@ -99,13 +99,13 @@
                     "text": "Sta nevicando"
                 }
             ],
-            "id": "c0e2081f-8619-48b1-af59-2de3e500113d",
+            "id": "9b344e42-717b-493c-8ac3-ebb145f9e537",
             "type": "translateToLogic"
         },
         {
             "text": "Se non sta piovendo, allora sta nevicando.",
             "solution": "\\neg P \\to Q",
-            "id": "6bcffbf4-0744-4c64-bf7a-59d93bb57878",
+            "id": "0101b695-8630-4baa-a099-f80ebad35d8c",
             "variables": [
                 {
                     "variable": "P",
@@ -121,7 +121,7 @@
         {
             "text": "Non si d\u00e0 il caso che, se sta piovendo, allora sta nevicando.",
             "solution": "\\neg (P \\to Q)",
-            "id": "884296d8-0101-4ca4-8de9-07ae26f1e474",
+            "id": "cff79337-7387-44ff-9917-8410b106571f",
             "variables": [
                 {
                     "variable": "P",
@@ -137,7 +137,7 @@
         {
             "text": "Non si d\u00e0 il caso che, se sta nevicando, allora sta piovendo.",
             "solution": "\\neg (Q \\to P)",
-            "id": "795527f8-5dd3-402b-86ad-1711ed0f715b",
+            "id": "22be593c-34ce-4cbb-b12f-eb2df2e09c94",
             "variables": [
                 {
                     "variable": "P",
@@ -151,6 +151,22 @@
             "type": "translateToLogic"
         },
         {
+            "text": "Saremo l\u00ec tra poco, ammesso che troviamo posto per la macchina.",
+            "solution": "Q \\to P",
+            "id": "08cc929e-1923-44d2-bc8e-0afa876a5199",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Saremo l\u00ec tra poco"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Troviamo posto per la macchina"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
             "text": "Non sta n\u00e9 piovendo n\u00e9 nevicando.",
             "solution": [
                 "\\neg P \\land \\neg Q",
@@ -158,7 +174,7 @@
                 "\\neg (Q \\lor P)",
                 "\\neg Q \\land \\neg P"
             ],
-            "id": "e3341d42-6fcc-4c19-9776-d0c16b669f3e",
+            "id": "a703ad02-84d1-4e98-88eb-f6012cc135a9",
             "variables": [
                 {
                     "variable": "P",
@@ -177,7 +193,7 @@
                 "(Q \\land P) \\to Q",
                 "(P \\land Q) \\to Q"
             ],
-            "id": "e29c19a3-8804-4ccd-93a4-2323a37a25b3",
+            "id": "993148ff-08e1-41a1-a9df-14e04360fd3b",
             "variables": [
                 {
                     "variable": "P",
@@ -191,9 +207,25 @@
             "type": "translateToLogic"
         },
         {
+            "text": "Andremo al mare, a meno che nevichi.",
+            "solution": ["\\neg Q \\to P"],
+            "id": "bf0cd3ab-b1d5-4afc-b6a6-48022c6d4b58",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Andremo al mare"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Nevica"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
             "text": "Se non sta piovendo, non \u00e8 vero che nevica.",
             "solution": "\\neg P \\to \\neg Q",
-            "id": "3755ed60-8d52-4d29-9591-b3a926a63722",
+            "id": "2f38c975-ec8d-421a-a174-855c9b0fac71",
             "variables": [
                 {
                     "variable": "P",
@@ -212,7 +244,7 @@
                 "P \\lor (Q \\land P)",
                 "P \\lor (P \\land Q)"
             ],
-            "id": "24f0216b-77f2-46ca-be74-5ee9e8f7bc5b",
+            "id": "daa8e1bd-0ca0-48e3-b0ba-959f048a3f58",
             "variables": [
                 {
                     "variable": "P",
@@ -228,7 +260,7 @@
         {
             "text": "O sta sia piovendo che nevicando, o sta nevicando ma non piovendo.",
             "solution": "(P \\land Q) \\lor (Q \\land \\neg P)",
-            "id": "5dcc8cd0-37ba-45b3-9263-71caf0359883",
+            "id": "0a06de57-e525-4039-a444-db1730b24f11",
             "variables": [
                 {
                     "variable": "P",
@@ -242,9 +274,29 @@
             "type": "translateToLogic"
         },
         {
+            "text": "Se nel fine settimana non piove e mia figlia non fa la matta metto mano all'app",
+            "solution": "(\\neg P\\land \\neg Q)\\toR",
+            "id": "88996695-9508-4cde-aa39-a97a75ccb300",
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Nel fine settimana piove"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Mia figlia fa la matta"
+                },
+                {
+                    "variable": "R",
+                    "text": "Metto mano all'app"
+                }
+            ],
+            "type": "translateToLogic"
+        },
+        {
             "text": "Se sono un nerd, allora se studio logica mi diverto",
             "solution": "P\\to(Q\\toR)",
-            "id": "cb790070-462d-4f55-9fda-ce5198388d2a",
+            "id": "9e89359c-20bc-4e59-bf8c-60ccf93ea6fd",
             "variables": [
                 {
                     "variable": "P",
@@ -260,6 +312,73 @@
                 }
             ],
             "type": "translateToLogic"
+        },
+        {
+            "id": "c26ef38f-75da-46ba-9c77-2da44e5080f3",
+            "formula": "P \\land (Q \\lor R)",
+            "isWellFormed": true,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "957f9dff-1850-4f20-88a6-067225a2e287",
+            "formula": "P \\land (Q \\lor R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "f175ff68-558e-4454-9df9-5c5288555483",
+            "formula": "P \\neg\\land Q \\lor R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "b6b37931-f946-47e2-b3dd-cf90592abe20",
+            "formula": "(P \\land QP) \\lor R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "a60635a1-9b1c-41ab-88f5-68bbe85296f3",
+            "formula": "(P \\leftrightarrow R) \\to \\neg(Q \\land (P \\lor R))",
+            "isWellFormed": true,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "80d1b167-8fb4-4cbc-9d5d-7b8bd58a21db",
+            "formula": "(P \\leftrightarrow R) \\to \\neg(Q \\land (P \\lor R)",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "ba16bffb-5a88-4b53-b5fb-612ecf101116",
+            "formula": "(P \\land QP) \\lor R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "c9065476-d253-489a-8e55-85fe3053a6b7",
+            "formula": "P\\ne R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+
+        {
+            "id": "86decf9f-0ca6-4505-92d2-ec32d88a58b1",
+            "formula": "(P \\neg Q) \\lor R",
+            "isWellFormed": false,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "c9065476-d253-489a-8e55-85fe3053a6b7",
+            "formula": "\\neg\\neg\\neg R",
+            "isWellFormed": true,
+            "type": "wellFormedCheck"
+        },
+        {
+            "id": "54a760f1-97a8-4f7e-9142-23df176ab843",
+            "formula": "\\neg\\neg(P \\land \\neg P)",
+            "isWellFormed": true,
+            "type": "wellFormedCheck"
         }
     ]
 }
