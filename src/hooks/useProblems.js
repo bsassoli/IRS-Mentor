@@ -76,8 +76,8 @@ export const useProblems = () => {
   }, [problems.length, currentProblemIndex]);
 
   const currentProblem = problems[currentProblemIndex] || { 
-    text: 'Caricamento...', 
-    solution: [], 
+    text: 'Caricamento...',
+    solution: [],
     id: null,
     variables: {},
     type: 'loading'
