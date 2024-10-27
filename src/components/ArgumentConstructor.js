@@ -1,59 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import ButtonGrid from './ButtonGrid';
 
 const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem, problem }) => {
-  const [premises, setPremises] = useState([]);
-  const [conclusion, setConclusion] = useState('');
-  const [latexFormula, setLatexFormula] = useState('');
+  const [argument, setArgument] = useState([]);
+  const [latexArgument, setLatexArgument] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const { darkMode } = useDarkMode();
 
-  useEffect(() => {
-    // Reset the argument when the problem changes
-    setPremises([]);
-    setConclusion('');
-    setLatexFormula('');
-  }, [problem]);
-
-  const addToPremises = (element) => {
-    setPremises([...premises, element]);
-    updateLatexFormula([...premises, element], conclusion);
-  };
-
-  const addToConclusion = (element) => {
-    setConclusion(element);
-    updateLatexFormula(premises, element);
-  };
-
-  const updateLatexFormula = (updatedPremises, updatedConclusion) => {
-    const premisesLatex = updatedPremises.map(p => p.latex).join(', ');
-    const conclusionLatex = updatedConclusion.latex || '';
-    setLatexFormula(`${premisesLatex} \\vdash ${conclusionLatex}`);
+  const addToArgument = (element) => {
+    setArgument([...argument, element]);
+    setLatexArgument(prevArgument => prevArgument + ' ' + element.latex);
   };
 
   const resetArgument = () => {
-    setPremises([]);
-    setConclusion('');
-    setLatexFormula('');
+    setArgument([]);
+    setLatexArgument('');
   };
 
   const backspace = () => {
-    if (conclusion) {
-      setConclusion('');
-    } else if (premises.length > 0) {
-      const newPremises = premises.slice(0, -1);
-      setPremises(newPremises);
+    if (argument.length > 0) {
+      const newArgument = argument.slice(0, -1);
+      setArgument(newArgument);
+      setLatexArgument(newArgument.map(f => f.latex).join(' '));
     }
-    updateLatexFormula(premises, conclusion);
   };
 
   const checkSolution = () => {
-    const userSolution = latexFormula.trim();
+    const userSolution = latexArgument.trim();
     const correctAnswers = problem.solution;
     if (correctAnswers.includes(userSolution)) {
       setIsSuccess(true);
@@ -75,48 +53,45 @@ const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
 
   return (
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-md`}>
-      <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Costruisci l'argomento</h2>
+      <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+        Costruzione dell'Argomento
+      </h2>
       <p className={`text-2xl mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{problem.text}</p>
       
       <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Frasi e variabili proposizionali:</h3>
-        <ul className="list-disc list-inside grid grid-cols-1 gap-2">
-          {Object.entries(problem.variables).map(([key, value]) => (
-            <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <span className="font-bold">{key}:</span> {value}
+        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Premesse:</h3>
+        <ul className="list-disc list-inside">
+          {problem.premises.map((premise, index) => (
+            <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{premise}</li>
+          ))}
+        </ul>
+        <h3 className={`text-lg font-semibold mt-4 mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Conclusione:</h3>
+        <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{problem.conclusion}</p>
+      </div>
+
+      <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
+        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Variabili proposizionali:</h3>
+        <ul className="list-disc list-inside grid grid-cols-2 gap-2">
+          {problem.variables.map((variable) => (
+            <li key={variable.variable} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <span className="font-bold">{variable.variable}:</span> {variable.text}
             </li>
           ))}
         </ul>
       </div>
 
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} mb-6`}>
-        <InlineMath math={latexFormula || '\\text{Il tuo argomento apparirà qui}'} />
+        <InlineMath math={latexArgument || '\\text{Il tuo argomento apparirà qui}'} />
       </div>
 
-      <ButtonGrid 
-        addToFormula={(element) => {
-          if (!conclusion) {
-            addToPremises(element);
-          } else {
-            addToConclusion(element);
-          }
-        }} 
-        backspace={backspace} 
-        darkMode={darkMode} 
-      />
+      <ButtonGrid addToFormula={addToArgument} backspace={backspace} darkMode={darkMode} />
 
       <div className="flex flex-col gap-4 mt-6">
-        <button
-          onClick={() => setConclusion({ latex: '\\therefore' })}
-          className={`w-full p-3 ${darkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-600 hover:bg-blue-700'} text-white text-lg rounded-lg transition-colors`}
-        >
-          Aggiungi conclusione
-        </button>
         <button
           onClick={checkSolution}
           className={`w-full p-4 ${darkMode ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white text-xl font-bold rounded-lg transition-colors`}
         >
-          Verifica argomento
+          Verifica soluzione
         </button>
         <button
           onClick={resetArgument}

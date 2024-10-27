@@ -40,7 +40,6 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
   const checkSolution = () => {
     const userSolution = normalizeFormula(latexFormula.trim());
     const correctAnswers = problem.solution.map(normalizeFormula);
-    console.log(userSolution, correctAnswers);
     if (correctAnswers.includes(userSolution)) {
       setIsSuccess(true);
       setModalMessage('Ottimo lavoro! Passando alla prossima domanda...');
@@ -63,9 +62,7 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-md`}>
       <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Problema</h2>
       <p className={`text-2xl mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{problem.text}</p>
-
-    {/* Aggiungiamo la sezione per mostrare le variabili proposizionali */}
-    <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
+      <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
         <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Variabili proposizionali:</h3>
         <ul className="list-disc list-inside grid grid-cols-2 gap-2">
           {Object.entries(problem.variables).map(([key, value]) => (
@@ -89,12 +86,20 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
         >
           Verifica soluzione
         </button>
-        <button
-          onClick={resetFormula}
-          className={`w-full p-3 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'} text-white text-lg rounded-lg transition-colors`}
-        >
-          Cancella
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={resetFormula}
+            className={`flex-1 p-3 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'} text-white text-lg rounded-lg transition-colors`}
+          >
+            Cancella
+          </button>
+          <button
+            onClick={onNextProblem}
+            className={`flex-1 p-3 ${darkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white text-lg rounded-lg transition-colors`}
+          >
+            Prossimo problema
+          </button>
+        </div>
       </div>
 
       {modalOpen && (

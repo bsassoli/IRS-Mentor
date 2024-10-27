@@ -379,6 +379,29 @@
             "formula": "\\neg\\neg(P \\land \\neg P)",
             "isWellFormed": true,
             "type": "wellFormedCheck"
-        }
+        },
+        {
+            "id": "a1b2c3d4-e5f6-4a5b-8c7d-9e8f7a6b5c4d",
+            "text": "Costruisci un argomento valido utilizzando le seguenti premesse e conclusione:",
+            "premises": [
+              "Se piove, allora la strada è bagnata.",
+              "Piove"
+            ],
+            "conclusion": "La strada è bagnata.",
+            "solution": [
+              "P, P \\to Q \\vdash Q"
+            ],
+            "variables": [
+              {
+                "variable": "P",
+                "text": "Piove"
+              },
+              {
+                "variable": "Q",
+                "text": "La strada è bagnata"
+              }
+            ],
+            "type": "argumentConstruction"
+          }
     ]
 }

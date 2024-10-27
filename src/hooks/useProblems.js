@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
@@ -14,6 +14,10 @@ const firebaseConfig = {
   measurementId: "G-J1EV200L67"
 };
 
+const API_URL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:3001/api/problems'
+  : 'https://your-firebase-url.com/problems';
+
 export const useProblems = () => {
   const [problems, setProblems] = useState([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
@@ -21,78 +25,102 @@ export const useProblems = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let app;
-    try {
-      app = initializeApp(firebaseConfig);
-    } catch (error) {
-      console.error("Firebase initialization error", error);
-      setError("Firebase initialization error: " + error.message);
-      setLoading(false);
-      return;
-    }
+    const fetchProblems = async () => {
+      try {
+        /* if (process.env.NODE_ENV === 'development') {
+          // Fetch from local server
+          const response = await fetch(API_URL);
+          if (!response.ok) {
+            throw new Error('Failed to fetch problems');
+          }
+          const data = await response.json();
+          processProblems(data.problems || data); // Handle both {problems: [...]} and direct array
+        } else  {*/
+          // Production mode: use Firebase
+          const app = initializeApp(firebaseConfig);
+          const database = getDatabase(app);
+          const dataRef = ref(database, 'problems');
 
-    const database = getDatabase(app);
-    const dataRef = ref(database, 'problems');
+          onValue(dataRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+              processProblems(Array.isArray(data) ? data : Object.values(data));
+            } else {
+              setError("No valid problems found in the database.");
+            }
+            setLoading(false);
+          }, (error) => {
+            setError("Error fetching data: " + error.message);
+            setLoading(false);
+          });
+        }
+       catch (error) {
+        console.error("Error fetching problems:", error);
+        setError("Error fetching problems: " + error.message);
+        setLoading(false);
+      }
+    };
 
-    const unsubscribe = onValue(dataRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log("Raw data from Firebase:", data);
+    const processProblems = (data) => {
+      if (!Array.isArray(data)) {
+        console.error("Received data is not an array:", data);
+        setError("Invalid data format received");
+        setLoading(false);
+        return;
+      }
 
-      if (data && typeof data === 'object') {
-        const problemsArray = Object.values(data).map(problem => ({
+      const problemsArray = data.map(problem => {
+        if (!problem || typeof problem !== 'object') {
+          console.error("Invalid problem object:", problem);
+          return null;
+        }
+
+        return {
           ...problem,
           solution: Array.isArray(problem.solution) ? problem.solution : [problem.solution],
-          variables: problem.variables ? problem.variables.reduce((acc, v) => {
-            acc[v.variable] = v.text;
-            return acc;
-          }, {}) : {}
-        }));
-        console.log("Processed problems array:", problemsArray);
-        setProblems(problemsArray);
-        setError(null);
-      } else {
-        console.error("Invalid data structure:", data);
-        setError("No valid problems found in the database.");
-      }
-      setLoading(false);
-    }, (error) => {
-      console.error("Firebase data fetching error:", error);
-      setError("Error fetching data: " + error.message);
-      setLoading(false);
-    });
+          variables: Array.isArray(problem.variables) 
+            ? problem.variables.reduce((acc, v) => {
+                if (v && v.variable && v.text) {
+                  acc[v.variable] = v.text;
+                }
+                return acc;
+              }, {})
+            : problem.variables || {}
+        };
+      }).filter(Boolean); // Remove any null entries
 
-    return () => unsubscribe();
+      setProblems(problemsArray);
+      setError(null);
+      setLoading(false);
+    };
+
+    fetchProblems();
   }, []);
 
-  const nextProblem = useCallback(() => {
-    console.log("Next problem function called");
-    console.log("Current index:", currentProblemIndex);
-    console.log("Total problems:", problems.length);
-    setCurrentProblemIndex((prevIndex) => {
-      const newIndex = (prevIndex + 1) % problems.length;
-      console.log("New index:", newIndex);
-      return newIndex;
-    });
-  }, [problems.length, currentProblemIndex]);
-
   const currentProblem = problems[currentProblemIndex] || { 
-    text: 'Caricamento...',
-    solution: [],
+    text: 'Caricamento...', 
+    solution: [], 
     id: null,
     variables: {},
     type: 'loading'
   };
 
-  const resetProblems = useCallback(() => {
-    setCurrentProblemIndex(0);
-  }, []);
+  const nextProblem = () => {
+    if (problems.length > 0) {
+      setCurrentProblemIndex((prevIndex) => (prevIndex + 1) % problems.length);
+    }
+  };
 
-  const getRandomProblem = useCallback(() => {
+  const resetProblems = () => {
+    setCurrentProblemIndex(0);
+  };
+
+  const getRandomProblem = () => {
     if (problems.length > 0) {
       const randomIndex = Math.floor(Math.random() * problems.length);
       setCurrentProblemIndex(randomIndex);
     }
-  }, [problems]);
+  };
 
   return {
     problems,
