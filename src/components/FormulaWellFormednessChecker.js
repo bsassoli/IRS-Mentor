@@ -1,3 +1,5 @@
+// src/components/FormulaWellFormednessChecker.js
+
 import React, { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -51,6 +53,12 @@ const FormulaWellFormednessChecker = ({ onCorrectAnswer, onIncorrectAnswer, onNe
         >
           No
         </button>
+        <button
+            onClick={onNextProblem}
+            className={`px-6 ${darkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white text-lg rounded-lg transition-colors`}
+          >
+            Prossimo problema
+          </button>
       </div>
 
       {modalOpen && (

@@ -1,3 +1,5 @@
+// src/hooks/useProblems.js
+
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
@@ -16,52 +18,71 @@ const firebaseConfig = {
 
 const API_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3001/api/problems'
-  : 'https://your-firebase-url.com/problems';
+  : 'https://fbf-2024-default-rtdb.europe-west1.firebasedatabase.app';
 
 export const useProblems = () => {
-  const [problems, setProblems] = useState([]);
+  const [allProblems, setAllProblems] = useState([]);
+  const [filteredProblems, setFilteredProblems] = useState([]);
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize Firebase outside of the useEffect
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  const filterProblemsByType = (type) => {
+    if (!type || type === 'all') {
+      setFilteredProblems(allProblems);
+    } else {
+      const filtered = allProblems.filter(problem => problem.type === type);
+      setFilteredProblems(filtered);
+    }
+    setCurrentProblemIndex(0);
+  };
+
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        /* if (process.env.NODE_ENV === 'development') {
-          // Fetch from local server
+        if (process.env.NODE_ENV === 'development') {
+          // Local development
           const response = await fetch(API_URL);
           if (!response.ok) {
             throw new Error('Failed to fetch problems');
           }
           const data = await response.json();
-          processProblems(data.problems || data); // Handle both {problems: [...]} and direct array
-        } else  {*/
-          // Production mode: use Firebase
-          const app = initializeApp(firebaseConfig);
-          const database = getDatabase(app);
+          processProblems(data.problems || data);
+        } else {
+          // Production: Firebase
           const dataRef = ref(database, 'problems');
-
+          
           onValue(dataRef, (snapshot) => {
             const data = snapshot.val();
+            console.log('Firebase data received:', data); // Debug log
+            
             if (data) {
-              processProblems(Array.isArray(data) ? data : Object.values(data));
+              const problemsArray = Array.isArray(data) ? data : Object.values(data);
+              processProblems(problemsArray);
             } else {
-              setError("No valid problems found in the database.");
+              setError("No problems found in database");
+              setLoading(false);
             }
-            setLoading(false);
           }, (error) => {
-            setError("Error fetching data: " + error.message);
+            console.error("Firebase error:", error);
+            setError("Error fetching problems: " + error.message);
             setLoading(false);
           });
         }
-       catch (error) {
-        console.error("Error fetching problems:", error);
+      } catch (error) {
+        console.error("Error in fetchProblems:", error);
         setError("Error fetching problems: " + error.message);
         setLoading(false);
       }
     };
 
     const processProblems = (data) => {
+      console.log('Processing problems:', data); // Debug log
+      
       if (!Array.isArray(data)) {
         console.error("Received data is not an array:", data);
         setError("Invalid data format received");
@@ -69,45 +90,52 @@ export const useProblems = () => {
         return;
       }
 
-      const problemsArray = data.map(problem => {
+      const processedProblems = data.map(problem => {
         if (!problem || typeof problem !== 'object') {
           console.error("Invalid problem object:", problem);
           return null;
         }
 
+        // Ensure all required fields are present
         return {
-          ...problem,
+          id: problem.id || Math.random().toString(36).substr(2, 9),
+          type: problem.type || 'unknown',
+          text: problem.text || '',
           solution: Array.isArray(problem.solution) ? problem.solution : [problem.solution],
-          variables: Array.isArray(problem.variables) 
-            ? problem.variables.reduce((acc, v) => {
-                if (v && v.variable && v.text) {
-                  acc[v.variable] = v.text;
-                }
-                return acc;
-              }, {})
-            : problem.variables || {}
+          variables: problem.variables || {},
+          premises: problem.premises || [],
+          conclusion: problem.conclusion || '',
+          formula: problem.formula,
+          isWellFormed: problem.isWellFormed,
         };
       }).filter(Boolean); // Remove any null entries
 
-      setProblems(problemsArray);
+      console.log('Processed problems:', processedProblems); // Debug log
+
+      setAllProblems(processedProblems);
+      setFilteredProblems(processedProblems);
       setError(null);
       setLoading(false);
     };
 
     fetchProblems();
-  }, []);
 
-  const currentProblem = problems[currentProblemIndex] || { 
-    text: 'Caricamento...', 
-    solution: [], 
-    id: null,
-    variables: {},
-    type: 'loading'
-  };
+    // Cleanup function
+    return () => {
+      // If using Firebase, you might want to clean up the listener
+      const dataRef = ref(database, 'problems');
+      onValue(dataRef, () => {});
+    };
+  }, []); // Empty dependency array
+
+  // Get current problem with loading state
+  const currentProblem = loading
+    ? { type: 'loading', text: 'Caricamento...', solution: [], variables: {} }
+    : filteredProblems[currentProblemIndex] || null;
 
   const nextProblem = () => {
-    if (problems.length > 0) {
-      setCurrentProblemIndex((prevIndex) => (prevIndex + 1) % problems.length);
+    if (filteredProblems.length > 0) {
+      setCurrentProblemIndex((prevIndex) => (prevIndex + 1) % filteredProblems.length);
     }
   };
 
@@ -116,19 +144,30 @@ export const useProblems = () => {
   };
 
   const getRandomProblem = () => {
-    if (problems.length > 0) {
-      const randomIndex = Math.floor(Math.random() * problems.length);
+    if (filteredProblems.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredProblems.length);
       setCurrentProblemIndex(randomIndex);
     }
   };
 
+  // Debug logs
+  console.log('Current state:', {
+    loading,
+    error,
+    allProblemsLength: allProblems.length,
+    filteredProblemsLength: filteredProblems.length,
+    currentProblemIndex,
+    currentProblem
+  });
+
   return {
-    problems,
+    problems: filteredProblems,
     currentProblem,
     currentProblemIndex,
     nextProblem,
     resetProblems,
     getRandomProblem,
+    filterProblemsByType,
     error,
     loading
   };

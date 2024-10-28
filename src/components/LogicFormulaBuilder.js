@@ -1,3 +1,6 @@
+// src/components/LogicFormulaBuilder.js
+// Description: This component allows the user to build a logical formula by selecting logical connectives and propositional variables.
+
 import React, { useState, useEffect } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -58,18 +61,42 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
     setModalOpen(true);
   };
 
+  // Helper function to safely render variables
+  const renderVariables = () => {
+    if (!problem.variables) return null;
+    
+    // Handle array format
+    if (Array.isArray(problem.variables)) {
+      return problem.variables.map((v, index) => (
+        <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <span className="font-bold">{v.variable}:</span> {v.text}
+        </li>
+      ));
+    }
+    
+    // Handle object format
+    return Object.entries(problem.variables).map(([key, value]) => (
+      <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        <span className="font-bold">{key}:</span> {value}
+      </li>
+    ));
+  };
+
   return (
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-md`}>
-      <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Problema</h2>
-      <p className={`text-2xl mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{problem.text}</p>
+      <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+        Problema
+      </h2>
+      <p className={`text-2xl mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        {problem.text}
+      </p>
+      
       <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Variabili proposizionali:</h3>
+        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+          Variabili proposizionali:
+        </h3>
         <ul className="list-disc list-inside grid grid-cols-2 gap-2">
-          {Object.entries(problem.variables).map(([key, value]) => (
-            <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <span className="font-bold">{key}:</span> {value}
-            </li>
-          ))}
+          {renderVariables()}
         </ul>
       </div>
 

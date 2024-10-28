@@ -1,3 +1,5 @@
+// src/components/ProblemDispatcher.js
+
 import React, { useState, useMemo } from 'react';
 import { useProblems } from '../hooks/useProblems';
 import { useDarkMode } from '../contexts/DarkModeContext';
@@ -6,11 +8,36 @@ import FormulaWellFormednessChecker from './FormulaWellFormednessChecker';
 import ArgumentConstructor from './ArgumentConstructor';
 import Header from './Header';
 
+// Define the mapping between problem types and components
 const PROBLEM_COMPONENTS = {
-  translateToLogic: LogicFormulaBuilder,
-  wellFormedCheck: FormulaWellFormednessChecker,
-  argumentConstruction: ArgumentConstructor,
+  'translateToLogic': LogicFormulaBuilder,
+  'wellFormedCheck': FormulaWellFormednessChecker,
+  'argumentConstruction': ArgumentConstructor,
 };
+
+// Define problem groups with matching IDs
+const PROBLEM_GROUPS = [
+  {
+    id: 'all',
+    name: 'Tutti i problemi',
+    description: 'Visualizza tutti i tipi di problemi'
+  },
+  {
+    id: 'translateToLogic',
+    name: 'Traduzione in Logica',
+    description: 'Esercizi di traduzione dal linguaggio naturale alla logica proposizionale'
+  },
+  {
+    id: 'wellFormedCheck',
+    name: 'Formule Ben Formate',
+    description: 'Verifica se una formula è ben formata'
+  },
+  {
+    id: 'argumentConstruction',
+    name: 'Costruzione Argomentazioni',
+    description: 'Costruisci argomenti logici validi'
+  }
+];
 
 const ProgressSection = ({ correctAnswers, incorrectAnswers, currentProblemIndex, totalProblems, darkMode }) => (
   <section className={`mb-8 ${darkMode ? 'bg-gray-800' : 'bg-white'} p-4 rounded-lg shadow-md flex justify-between items-center`}>
@@ -34,13 +61,25 @@ const ProgressSection = ({ correctAnswers, incorrectAnswers, currentProblemIndex
 
 const ProblemDispatcher = () => {
   const [scores, setScores] = useState({ correct: 0, incorrect: 0 });
+  const [selectedGroup, setSelectedGroup] = useState('all');
   const { darkMode } = useDarkMode();
   const {
     currentProblem,
     nextProblem,
     problems,
-    currentProblemIndex
+    currentProblemIndex,
+    filterProblemsByType
   } = useProblems();
+
+  const handleGroupSelect = (groupId) => {
+    setSelectedGroup(groupId);
+    if (groupId === 'all') {
+      filterProblemsByType(null); // Show all problems
+    } else {
+      filterProblemsByType(groupId); // Filter by problem type
+    }
+    setScores({ correct: 0, incorrect: 0 }); // Reset scores when changing groups
+  };
 
   const handleAnswer = (isCorrect) => {
     setScores(prev => ({
@@ -56,11 +95,23 @@ const ProblemDispatcher = () => {
     problem: currentProblem
   }), [currentProblem, nextProblem]);
 
-  const ProblemComponent = PROBLEM_COMPONENTS[currentProblem?.type];
+  // Debug log
+  console.log('Current problem:', currentProblem);
+  console.log('Problem type:', currentProblem?.type);
+  console.log('Available components:', Object.keys(PROBLEM_COMPONENTS));
+
+  const ProblemComponent = currentProblem?.type ? PROBLEM_COMPONENTS[currentProblem.type] : null;
+
+  // Find current group name for display
+  const currentGroupName = PROBLEM_GROUPS.find(g => g.id === selectedGroup)?.name;
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} font-['Istok_Web']`}>
-      <Header />
+      <Header 
+        problemGroups={PROBLEM_GROUPS}
+        currentGroup={currentGroupName}
+        onGroupSelect={handleGroupSelect}
+      />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <ProgressSection
           correctAnswers={scores.correct}
@@ -73,7 +124,14 @@ const ProblemDispatcher = () => {
         {ProblemComponent ? (
           <ProblemComponent {...commonProps} />
         ) : (
-          <p>Tipo di problema non riconosciuto</p>
+          <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+            <p className="text-xl">
+              {currentProblem?.type === 'loading' 
+                ? 'Caricamento problemi...' 
+                : `Tipo di problema non riconosciuto: ${currentProblem?.type}`
+              }
+            </p>
+          </div>
         )}
       </div>
     </div>

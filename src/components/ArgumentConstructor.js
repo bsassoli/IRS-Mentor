@@ -1,3 +1,6 @@
+//src/components/ArgumentConstructor.js
+// Description: This component allows the user to construct an argument by selecting logical connectives and propositional variables.
+
 import React, { useState } from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
@@ -51,6 +54,27 @@ const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
     setModalOpen(true);
   };
 
+  // Helper function to safely render variables
+  const renderVariables = () => {
+    if (!problem.variables) return null;
+    
+    // Handle array format
+    if (Array.isArray(problem.variables)) {
+      return problem.variables.map((v, index) => (
+        <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <span className="font-bold">{v.variable}:</span> {v.text}
+        </li>
+      ));
+    }
+    
+    // Handle object format
+    return Object.entries(problem.variables).map(([key, value]) => (
+      <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        <span className="font-bold">{key}:</span> {value}
+      </li>
+    ));
+  };
+
   return (
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-md`}>
       <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
@@ -61,7 +85,7 @@ const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
       <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
         <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Premesse:</h3>
         <ul className="list-disc list-inside">
-          {problem.premises.map((premise, index) => (
+          {Array.isArray(problem.premises) && problem.premises.map((premise, index) => (
             <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{premise}</li>
           ))}
         </ul>
@@ -69,16 +93,16 @@ const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
         <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{problem.conclusion}</p>
       </div>
 
-      <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-        <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>Variabili proposizionali:</h3>
-        <ul className="list-disc list-inside grid grid-cols-2 gap-2">
-          {problem.variables.map((variable) => (
-            <li key={variable.variable} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <span className="font-bold">{variable.variable}:</span> {variable.text}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {problem.variables && Object.keys(problem.variables).length > 0 && (
+        <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
+          <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+            Variabili proposizionali:
+          </h3>
+          <ul className="grid grid-cols-2 gap-2 list-disc list-inside">
+            {renderVariables()}
+          </ul>
+        </div>
+      )}
 
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} mb-6`}>
         <InlineMath math={latexArgument || '\\text{Il tuo argomento apparirà qui}'} />
