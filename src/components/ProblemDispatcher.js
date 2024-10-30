@@ -107,7 +107,7 @@ const ProblemDispatcher = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} font-['Istok_Web']`}>
-      <Header 
+      <Header
         problemGroups={PROBLEM_GROUPS}
         currentGroup={currentGroupName}
         onGroupSelect={handleGroupSelect}
@@ -126,8 +126,8 @@ const ProblemDispatcher = () => {
         ) : (
           <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
             <p className="text-xl">
-              {currentProblem?.type === 'loading' 
-                ? 'Caricamento problemi...' 
+              {currentProblem?.type === 'loading'
+                ? 'Caricamento problemi...'
                 : `Tipo di problema non riconosciuto: ${currentProblem?.type}`
               }
             </p>

@@ -64,7 +64,7 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
   // Helper function to safely render variables
   const renderVariables = () => {
     if (!problem.variables) return null;
-    
+
     // Handle array format
     if (Array.isArray(problem.variables)) {
       return problem.variables.map((v, index) => (
@@ -73,7 +73,7 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
         </li>
       ));
     }
-    
+
     // Handle object format
     return Object.entries(problem.variables).map(([key, value]) => (
       <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
