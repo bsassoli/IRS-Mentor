@@ -409,11 +409,11 @@
             "text": "Costruisci un argomento valido utilizzando le seguenti premesse e conclusione:",
             "premises": [
                 "\\text{Verr\u00f2 a trovarti quando star\u00f2 meglio.}",
-                "\\text{Non sto bene.}"
+                "\\text{Non sono venuto a trovarti.}"
             ],
-            "conclusion": "\\text{Non verr\u00f2 a trovarti.}",
+            "conclusion": "\\text{Non sto meglio.}",
             "solution": [
-                "P \\to Q,\\negP\\therefore\\negQ"
+                "P \\to Q,\\negQ\\therefore\\negP"
             ],
             "variables": [
                 {

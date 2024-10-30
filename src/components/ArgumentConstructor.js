@@ -28,7 +28,7 @@ const InstructionsPopover = ({ darkMode }) => {
 
       {isVisible && (
         <>
-          <div 
+          <div
             className="fixed inset-0 z-10"
             onClick={() => setIsVisible(false)}
           />
@@ -207,19 +207,26 @@ const ArgumentConstructor = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
       <div className="flex flex-col gap-4 mt-6">
         <button
           onClick={checkSolution}
-          className={`w-full p-4 ${darkMode ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} 
-            text-white text-xl font-bold rounded-lg transition-colors`}
+          className={`w-full p-4 ${darkMode ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white text-xl font-bold rounded-lg transition-colors`}
         >
           Verifica soluzione
         </button>
-        <button
-          onClick={resetArgument}
-          className={`w-full p-3 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'} 
-            text-white text-lg rounded-lg transition-colors`}
-        >
-          Cancella
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={resetArgument}
+            className={`flex-1 p-3 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'} text-white text-lg rounded-lg transition-colors`}
+          >
+            Cancella
+          </button>
+          <button
+            onClick={onNextProblem}
+            className={`flex-1 p-3 ${darkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white text-lg rounded-lg transition-colors`}
+          >
+            Prossimo problema
+          </button>
+        </div>
       </div>
+
 
       {/* Result Modal */}
       {modalOpen && (
