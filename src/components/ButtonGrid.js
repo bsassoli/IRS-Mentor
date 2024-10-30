@@ -20,20 +20,27 @@ const ButtonGrid = ({ addToFormula, backspace, darkMode }) => {
     { id: 'S', latex: 'S' },
   ];
 
-  const otherSymbols = [
+  const argumentElements = [
+    { id: 'premise-separator', latex: ',', display: ',' },
+    { id: 'conclusion-marker', latex: '\\therefore', display: '∴' },
     { id: '(', latex: '(' },
     { id: ')', latex: ')' },
-    { id: ',', latex: ',' },
   ];
 
-  const renderButtons = (elements) => (
+  const renderButtons = (elements, isArgumentElement = false) => (
     elements.map((item) => (
       <button
         key={item.id}
         onClick={() => addToFormula(item)}
-        className={`p-4 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} rounded-lg ${darkMode ? 'text-white' : 'text-gray-800'} text-xl transition-colors flex-1`}
+        className={`p-4 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} 
+          rounded-lg ${darkMode ? 'text-white' : 'text-gray-800'} text-xl transition-colors flex-1
+          ${isArgumentElement && item.id === 'conclusion-marker' ? 'font-bold' : ''}`}
       >
-        <InlineMath math={item.latex} />
+        {isArgumentElement && item.display ? (
+          item.display
+        ) : (
+          <InlineMath math={item.latex} />
+        )}
       </button>
     ))
   );
@@ -47,10 +54,11 @@ const ButtonGrid = ({ addToFormula, backspace, darkMode }) => {
         {renderButtons(propositionalVariables)}
       </div>
       <div className="flex justify-between gap-2">
-        {renderButtons(otherSymbols)}
+        {renderButtons(argumentElements, true)}
         <button
           onClick={backspace}
-          className={`p-4 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} rounded-lg ${darkMode ? 'text-white' : 'text-gray-800'} text-xl transition-colors flex-1`}
+          className={`p-4 ${darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} 
+            rounded-lg ${darkMode ? 'text-white' : 'text-gray-800'} text-xl transition-colors flex-1`}
         >
           ⌫
         </button>
