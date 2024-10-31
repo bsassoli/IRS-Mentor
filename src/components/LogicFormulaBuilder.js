@@ -90,7 +90,7 @@ const LogicFormulaBuilder = ({ onCorrectAnswer, onIncorrectAnswer, onNextProblem
       <p className={`text-2xl mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
         {problem.text}
       </p>
-      
+
       <div className={`mb-6 ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
         <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
           Variabili proposizionali:
