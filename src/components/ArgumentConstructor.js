@@ -1,4 +1,4 @@
-//src/components/ArgumentConstructor.js
+// src/components/ArgumentConstructor.js
 // Description: This component allows the user to construct an argument by selecting logical connectives and propositional variables.
 
 import React from 'react';

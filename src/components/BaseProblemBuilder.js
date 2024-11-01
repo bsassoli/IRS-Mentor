@@ -1,3 +1,6 @@
+// src/components/BaseProblemBuilder.js
+// Description: This component is a base problem builder that can be used to build different types of problems.
+
 import React, { useState } from 'react';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { HelpCircle } from 'lucide-react';

@@ -1,3 +1,6 @@
+// src/components/LogicFormulaBuilder.js
+// Description: This component is a ProblemBuilder for the logic formula translation problem type.
+
 import React from 'react';
 import BaseProblemBuilder from './BaseProblemBuilder';
 import { LogicFormulaInteraction } from './interactions';

@@ -1,3 +1,6 @@
+// src/hooks/useProblems.js
+// Description: This hook fetches problems from a local API or Firebase and provides them to the app.
+
 import { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';

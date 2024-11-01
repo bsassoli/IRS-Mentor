@@ -1,3 +1,6 @@
+// src/components/interactions/TruthTableInteraction.js
+// Description: This component allows the user to construct a truth table for a given logical formula.
+
 import React, { useState } from 'react';
 import { InlineMath } from 'react-katex';
 

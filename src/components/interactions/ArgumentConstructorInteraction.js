@@ -1,3 +1,6 @@
+// src/components/interactions/ArgumentConstructorInteraction.js
+// Description: This component allows the user to construct an argument by selecting logical connectives and propositional variables.
+
 import React, { useState, useEffect } from 'react';
 import { InlineMath } from 'react-katex';
 import ButtonGrid from '../ButtonGrid';

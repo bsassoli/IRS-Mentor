@@ -1,4 +1,5 @@
 // src/components/ProblemDispatcher.js
+// Description: This component is the main component that handles the logic for displaying and solving problems.
 
 import React, { useState, useMemo } from 'react';
 import { useProblems } from '../hooks/useProblems';

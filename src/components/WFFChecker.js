@@ -1,7 +1,6 @@
 // src/components/WFFChecker.js
 // Description: Problem builder for the Well-Formed Formula problem type
 
-// src/components/WFFChecker.js
 import React from 'react';
 import { InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';

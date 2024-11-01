@@ -1,3 +1,6 @@
+// src/components/interactions/LogicFormulaInteraction.js
+// Description: This component allows the user to input a logical formula by selecting logical connectives and propositional variables.
+
 import React, { useState, useEffect } from 'react';
 import { InlineMath } from 'react-katex';
 import ButtonGrid from '../ButtonGrid';

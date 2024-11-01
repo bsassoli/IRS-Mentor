@@ -1,5 +1,6 @@
 // src/components/interactions/WFFInteraction.js
 // Description: Interaction component for the Well-Formed Formula problem type
+
 import React from 'react';
 
 const WFFInteraction = ({ problem, darkMode, onSuccess, onError, onNextProblem }) => {

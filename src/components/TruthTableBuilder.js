@@ -1,4 +1,6 @@
 // src/components/TruthTableBuilder.js
+// Description: This component is a ProblemBuilder for the truth table problem type.
+
 import React from 'react';
 import BaseProblemBuilder from './BaseProblemBuilder';
 import TruthTableInteraction from './interactions/TruthTableInteraction';
