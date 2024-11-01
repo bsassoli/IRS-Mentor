@@ -4,18 +4,19 @@ import React, { useState, useMemo } from 'react';
 import { useProblems } from '../hooks/useProblems';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import LogicFormulaBuilder from './LogicFormulaBuilder';
-import FormulaWellFormednessChecker from './FormulaWellFormednessChecker';
+import WFFChecker from './WFFChecker';
 import ArgumentConstructor from './ArgumentConstructor';
+import TruthTableBuilder from './TruthTableBuilder';
 import Header from './Header';
 
 // Define the mapping between problem types and components
 const PROBLEM_COMPONENTS = {
   'translateToLogic': LogicFormulaBuilder,
-  'wellFormedCheck': FormulaWellFormednessChecker,
+  'wellFormedCheck': WFFChecker,
   'argumentConstruction': ArgumentConstructor,
+  'truthTable': TruthTableBuilder,
 };
 
-// Define problem groups with matching IDs
 const PROBLEM_GROUPS = [
   {
     id: 'all',
@@ -34,8 +35,13 @@ const PROBLEM_GROUPS = [
   },
   {
     id: 'argumentConstruction',
-    name: 'Costruzione Argomentazioni',
-    description: 'Costruisci argomenti logici validi'
+    name: 'Costruzione di Argomentazioni',
+    description: 'Costruisci argomentazioni valide',
+  },
+  {
+    id: 'truthTable',
+    name: 'Tavole di Verità',
+    description: 'Costruisci tavole di verità'
   }
 ];
 
@@ -68,17 +74,27 @@ const ProblemDispatcher = () => {
     nextProblem,
     problems,
     currentProblemIndex,
-    filterProblemsByType
+    filterProblemsByType,
+    error,
+    loading
   } = useProblems();
 
+  // Enhanced debugging
+  console.log('ProblemDispatcher Debug:', {
+    'Available Components': Object.keys(PROBLEM_COMPONENTS),
+    'Selected Group': selectedGroup,
+    'Current Problem Full': currentProblem,
+    'Current Problem Type': currentProblem?.type,
+    'Is Component Available': currentProblem?.type ? !!PROBLEM_COMPONENTS[currentProblem.type] : 'No type',
+    'Problems Length': problems.length,
+    'Current Index': currentProblemIndex
+  });
+
   const handleGroupSelect = (groupId) => {
+    console.log('Group selected:', groupId);
     setSelectedGroup(groupId);
-    if (groupId === 'all') {
-      filterProblemsByType(null); // Show all problems
-    } else {
-      filterProblemsByType(groupId); // Filter by problem type
-    }
-    setScores({ correct: 0, incorrect: 0 }); // Reset scores when changing groups
+    filterProblemsByType(groupId === 'all' ? null : groupId);
+    setScores({ correct: 0, incorrect: 0 });
   };
 
   const handleAnswer = (isCorrect) => {
@@ -95,21 +111,60 @@ const ProblemDispatcher = () => {
     problem: currentProblem
   }), [currentProblem, nextProblem]);
 
-  // Debug log
-  console.log('Current problem:', currentProblem);
-  console.log('Problem type:', currentProblem?.type);
-  console.log('Available components:', Object.keys(PROBLEM_COMPONENTS));
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+          <p className="text-xl">Caricamento problemi...</p>
+        </div>
+      );
+    }
 
-  const ProblemComponent = currentProblem?.type ? PROBLEM_COMPONENTS[currentProblem.type] : null;
+    if (error) {
+      return (
+        <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+          <p className="text-xl text-red-500">Errore: {error}</p>
+        </div>
+      );
+    }
 
-  // Find current group name for display
-  const currentGroupName = PROBLEM_GROUPS.find(g => g.id === selectedGroup)?.name;
+    if (!currentProblem) {
+      return (
+        <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+          <p className="text-xl">Nessun problema disponibile</p>
+        </div>
+      );
+    }
+
+    const ProblemComponent = PROBLEM_COMPONENTS[currentProblem.type];
+
+    if (!ProblemComponent) {
+      return (
+        <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
+          <p className="text-xl">
+            Tipo di problema non riconosciuto: {currentProblem.type || 'undefined'}
+          </p>
+          <p className="mt-2 text-gray-400">
+            Tipi disponibili: {Object.keys(PROBLEM_COMPONENTS).join(', ')}
+          </p>
+        </div>
+      );
+    }
+
+    return <ProblemComponent {...commonProps} />;
+  };
+
+  // Get current group name
+  const getCurrentGroupName = () => {
+    const group = PROBLEM_GROUPS.find(g => g.id === selectedGroup);
+    return group ? group.name : 'Tutti i problemi';
+  };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} font-['Istok_Web']`}>
       <Header
         problemGroups={PROBLEM_GROUPS}
-        currentGroup={currentGroupName}
+        currentGroup={getCurrentGroupName()}
         onGroupSelect={handleGroupSelect}
       />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -121,18 +176,7 @@ const ProblemDispatcher = () => {
           darkMode={darkMode}
         />
 
-        {ProblemComponent ? (
-          <ProblemComponent {...commonProps} />
-        ) : (
-          <div className={`p-6 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}>
-            <p className="text-xl">
-              {currentProblem?.type === 'loading'
-                ? 'Caricamento problemi...'
-                : `Tipo di problema non riconosciuto: ${currentProblem?.type}`
-              }
-            </p>
-          </div>
-        )}
+        {renderContent()}
       </div>
     </div>
   );
