@@ -45,9 +45,9 @@ export const useProblems = () => {
   const processProblems = (data) => {
     // Add debug logging
     console.log('Processing raw data:', data);
-    
+
     if (!data) return [];
-    
+
     // Handle potential nested data structure from json-server
     let problemsArray;
     if (data.problems) {
@@ -57,9 +57,9 @@ export const useProblems = () => {
     } else {
       problemsArray = Object.values(data);
     }
-    
+
     console.log('Extracted problems array:', problemsArray);
-    
+
     const processed = problemsArray
       .filter(problem => {
         const isValid = problem && problem.type;
@@ -147,7 +147,7 @@ export const useProblems = () => {
         onValue(dataRef, () => {});
       }
     };
-  }, [database, isDevelopment]);
+  }, [database]);
 
   return {
     problems: filteredProblems,
