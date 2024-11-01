@@ -39,27 +39,6 @@ const InstructionsPopover = ({ darkMode, instructions }) => {
   ) : null;
 };
 
-const ResultModal = ({ isOpen, onClose, message, isSuccess, darkMode }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg`}>
-        <h3 className={`text-xl font-bold font-['EB_Garamond'] ${isSuccess ? 'text-green-500' : 'text-red-500'}`}>
-          {isSuccess ? 'Ottimo lavoro!' : 'Riprova!'}
-        </h3>
-        <p className={`my-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{message}</p>
-        <button
-          onClick={onClose}
-          className={`px-4 py-2 ${darkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white rounded transition-colors`}
-        >
-          Chiudi
-        </button>
-      </div>
-    </div>
-  );
-};
-
 const BaseProblemBuilder = ({
   problem,
   onCorrectAnswer,
