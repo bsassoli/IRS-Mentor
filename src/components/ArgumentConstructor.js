@@ -3,15 +3,9 @@
 
 import React from 'react';
 import BaseProblemBuilder from './BaseProblemBuilder';
+import { ArgumentConstructorInteraction } from './interactions';
 
 const ArgumentConstructor = (props) => {
-  const normalizeArgument = (latex) => {
-    return latex
-      .replace(/\\/g, '\\\\')
-      .replace(/\s+/g, '')
-      .trim();
-  };
-
   const instructions = (
     <>
       <p className="mb-2"><strong>Formato richiesto:</strong></p>
@@ -23,14 +17,27 @@ const ArgumentConstructor = (props) => {
     </>
   );
 
+  const normalizeArgument = (latex) => {
+    return latex
+      .replace(/\\/g, '\\\\')
+      .replace(/\s+/g, '')
+      .trim();
+  };
+
+  // Wrap the interaction component to inject the normalizeInput prop
+  const InteractionComponent = (interactionProps) => (
+    <ArgumentConstructorInteraction
+      {...interactionProps}
+      normalizeInput={normalizeArgument}
+    />
+  );
+
   return (
     <BaseProblemBuilder
       {...props}
-      title="Problema"
-      inputPlaceholder="Il tuo argomento apparirà qui"
+      title="Costruisci l'argomento"
       instructions={instructions}
-      normalizeInput={normalizeArgument}
-      isArgumentBuilder={true}
+      InteractionComponent={InteractionComponent}
     />
   );
 };
