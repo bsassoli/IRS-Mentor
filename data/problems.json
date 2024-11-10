@@ -383,14 +383,14 @@
         },
         {
             "id": "1e38bc52-7fad-4dfa-838d-11baa9976276",
-            "text": "Costruisci un argomento valido utilizzando le seguenti premesse e conclusione:",
+            "text": "Formalizza la seguente argomentazione:",
             "premises": [
                 "\\text{Se piove, allora la strada \u00e8 bagnata.}",
                 "\\text{Piove}"
             ],
             "conclusion": "\\text{La strada \u00e8 bagnata.}",
             "solution": [
-                "P \\to Q,P\\thereforeQ"
+                "P \\to Q,P\\therefore Q"
             ],
             "variables": [
                 {
@@ -406,14 +406,14 @@
         },
         {
             "id": "3906e2f7-36d2-44c3-b85d-c1a4b3d72203",
-            "text": "Costruisci un argomento valido utilizzando le seguenti premesse e conclusione:",
+            "text": "Formalizza la seguente argomentazione:",
             "premises": [
                 "\\text{Verr\u00f2 a trovarti quando star\u00f2 meglio.}",
                 "\\text{Non sono venuto a trovarti.}"
             ],
             "conclusion": "\\text{Non sto meglio.}",
             "solution": [
-                "P \\to Q,\\negQ\\therefore\\negP"
+                "P \\to Q,\\negQ \\therefore \\negP"
             ],
             "variables": [
                 {
@@ -428,9 +428,121 @@
             "type": "argumentConstruction"
         },
         {
+            "id": "problema9",
+            "text": "Formalizza la seguente argomentazione:",
+            "premises": [
+                "\\text{Se oggi è venerdì, allora domani è sabato.}",
+                "\\text{Se domani è sabato, allora dopodomani è domenica.}",
+                "\\text{Dopodomani non è domenica.}"
+            ],
+            "conclusion": "\\text{Oggi non è venerdì.}",
+            "solution": [
+                "P \\to Q, Q \\to R, \\negR \\therefore \\negP"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Oggi è venerdì"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Domani è sabato"
+                },
+                {
+                    "variable": "R",
+                    "text": "Dopodomani è domenica"
+                }
+            ],
+            "type": "argumentConstruction"
+        },
+        {
+            "id": "problema14",
+            "text": "Formalizza la seguente argomentazione:",
+            "premises": [
+                "\\text{Se studio matematica e logica, allora supero l'esame.}",
+                "\\text{Ho studiato matematica.}",
+                "\\text{Non ho superato l'esame.}"
+            ],
+            "conclusion": "\\text{Non ho studiato logica.}",
+            "solution": [
+                "(P \\land Q) \\to R, P, \\negR \\therefore \\negQ"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Studio matematica"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Studio logica"
+                },
+                {
+                    "variable": "R",
+                    "text": "Supero l'esame"
+                }
+            ],
+            "type": "argumentConstruction"
+        },
+        {
+            "id": "problema16",
+            "text": "Formalizza la seguente argomentazione:",
+            "premises": [
+                "\\text{Se non studio o non dormo abbastanza, allora sono stanco.}",
+                "\\text{Se sono stanco, allora bevo caffè.}",
+                "\\text{Non bevo caffè.}",
+                "\\text{Dormo abbastanza.}"
+            ],
+            "conclusion": "\\text{Studio.}",
+            "solution": [
+                "(\\negP \\lor \\negQ) \\to R, R \\to S, \\negS, Q \\therefore P"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Studio"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Dormo abbastanza"
+                },
+                {
+                    "variable": "R",
+                    "text": "Sono stanco"
+                },
+                {
+                    "variable": "S",
+                    "text": "Bevo caffè"
+                }
+            ],
+            "type": "argumentConstruction"
+        },
+        {
+            "id": "problema16",
+            "text": "Formalizza la seguente argomentazione:",
+            "premises": [
+                "\\text{Non è vero che dormo abbastanza e vado dormire presto.}",
+                "\\text{Vado a dormire presto.}"
+            ],
+            "conclusion": "\\text{Non dormo abbastanza.}",
+            "solution": [
+                "\\neg (P \\land Q) , Q \\therefore \\neg P"
+            ],
+            "variables": [
+                {
+                    "variable": "P",
+                    "text": "Dormo abbastanza"
+                },
+                {
+                    "variable": "Q",
+                    "text": "Vado a dormire presto"
+                }
+            ],
+            "type": "argumentConstruction"
+        },
+        {
             "id": "d5362b06-2004-49cf-820e-785d746f8404",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verit\u00e0 per la seguente formula:",
+            "text": "Costruisci la tavola di verit\u00e0 per la seguente formula:",
             "formula": "P \\land Q",
             "variables": [
                 "P",
@@ -447,7 +559,7 @@
         {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef1",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "P \\lor Q",
             "variables": ["P", "Q"],
             "solution": [0, 1, 1, 1],
@@ -456,7 +568,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef2",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "\\neg(P \\land Q)",
             "variables": ["P", "Q"],
             "solution": [1, 1, 1, 0],
@@ -465,7 +577,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef3",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "P \\to Q",
             "variables": ["P", "Q"],
             "solution": [1, 1, 0, 1],
@@ -474,7 +586,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef4",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "(P \\land Q) \\lor R",
             "variables": ["P", "Q", "R"],
             "solution": [0, 1, 0, 1, 0, 1, 0, 1],
@@ -483,7 +595,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef5",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "P \\to (Q \\to R)",
             "variables": ["P", "Q", "R"],
             "solution": [1, 1, 1, 1, 1, 0, 1, 1],
@@ -492,7 +604,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef6",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "(P \\to Q) \\leftrightarrow (\\neg Q \\to \\neg P)",
             "variables": ["P", "Q"],
             "solution": [1, 1, 1, 1],
@@ -501,7 +613,7 @@
           {
             "id": "8f3a1d20-7c24-4b59-9e3d-12345abcdef7",
             "type": "truthTable",
-            "text": "Costruisci la tabella di verità per la seguente formula:",
+            "text": "Costruisci la tavola di verità per la seguente formula:",
             "formula": "(P \\land \\neg Q) \\lor (\\neg P \\land Q)",
             "variables": ["P", "Q"],
             "solution": [0, 1, 1, 0],

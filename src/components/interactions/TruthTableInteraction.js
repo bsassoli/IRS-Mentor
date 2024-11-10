@@ -18,7 +18,7 @@ const TruthTableInteraction = ({ problem, darkMode, onSuccess, onError, onNextPr
     const isCorrect = tableValues.every((value, index) => 
       value === problem.solution[index]
     );
-    
+
     if (isCorrect) {
       onSuccess();
     } else {
@@ -39,11 +39,7 @@ const TruthTableInteraction = ({ problem, darkMode, onSuccess, onError, onNextPr
 
   return (
     <div className="space-y-6">
-      {/* Formula Display */}
-      <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-        <p className="text-lg mb-2">Costruisci la tabella di verità per la formula:</p>
-        <InlineMath math={problem.formula} />
-      </div>
+      {/* Problem Content */}
 
       {/* Truth Table */}
       <div className={`overflow-x-auto ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-lg p-4`}>
@@ -70,7 +66,7 @@ const TruthTableInteraction = ({ problem, darkMode, onSuccess, onError, onNextPr
                   </td>
                 ))}
                 {/* Result column - clickable */}
-                <td 
+                <td
                   onClick={() => toggleCell(rowIndex)}
                   className={`px-4 py-2 text-center cursor-pointer
                     ${darkMode ? 'hover:bg-gray-600' : 'hover:bg-gray-200'}

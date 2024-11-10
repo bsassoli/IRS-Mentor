@@ -2,6 +2,7 @@
 // Description: This component is a base problem builder that can be used to build different types of problems.
 
 import React, { useState } from 'react';
+import ProblemContent from './ProblemContent';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { HelpCircle } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const InstructionsPopover = ({ darkMode, instructions }) => {
         onClick={() => setIsVisible(!isVisible)}
         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg
           ${darkMode 
-            ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+            ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
             : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
           } transition-colors`}
       >
@@ -49,8 +50,7 @@ const BaseProblemBuilder = ({
   onNextProblem,
   title = "Problema",
   instructions,
-  InteractionComponent, // This is now a component with normalizeInput already injected
-  renderProblemContent,
+  InteractionComponent,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -88,26 +88,21 @@ const BaseProblemBuilder = ({
 
   return (
     <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} p-6 rounded-lg shadow-md`}>
-      {/* Problem Title and Content */}
+      {/* Problem Title */}
       <div className="mb-8">
         <h2 className={`text-3xl font-bold mb-4 font-['EB_Garamond'] ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
           {title}
         </h2>
-        <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-          {renderProblemContent?.(darkMode) || (
-            <p className={`text-lg mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              {problem.text}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Instructions */}
+        {/* Instructions */}
       {instructions && (
         <div className="mb-6">
           <InstructionsPopover darkMode={darkMode} instructions={instructions} />
         </div>
       )}
+
+        {/* Problem Content */}
+        <ProblemContent problem={problem} darkMode={darkMode} />
+      </div>
 
       {/* Interaction Area */}
       <InteractionComponent
@@ -117,7 +112,6 @@ const BaseProblemBuilder = ({
         onError={handleError}
         onNextProblem={onNextProblem}
       />
-
       {/* Result Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

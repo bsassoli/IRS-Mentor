@@ -11,8 +11,7 @@ const TruthTableBuilder = (props) => {
       <p className="mb-2"><strong>Istruzioni:</strong></p>
       <ul className="list-disc list-inside space-y-1">
         <li>Clicca sulle celle nella colonna risultato per alternare tra 0 e 1</li>
-        <li>Le celle grigie mostrano i valori delle variabili</li>
-        <li>Completa l'intera tavolaa prima di verificare la soluzione</li>
+        <li>0 rappresenta il valore "FALSO" o "F", mentre 1 rappresenta il valore "VERO" o "V"</li>
       </ul>
     </>
   );

@@ -58,39 +58,12 @@ const LogicFormulaInteraction = ({
     }
   };
 
-  // Render variables if present
-  const renderVariables = () => {
-    if (!problem.variables) return null;
-
-    if (Array.isArray(problem.variables)) {
-      return problem.variables.map((v, index) => (
-        <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          <span className="font-bold">{v.variable}:</span> {v.text}
-        </li>
-      ));
-    }
-
-    return Object.entries(problem.variables).map(([key, value]) => (
-      <li key={key} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-        <span className="font-bold">{key}:</span> {value}
-      </li>
-    ));
-  };
-
+  
   return (
     <div className="space-y-6">
-      {/* Variables Section */}
-      {problem.variables && (Array.isArray(problem.variables) || Object.keys(problem.variables).length > 0) && (
-        <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-          <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-            Variabili proposizionali:
-          </h3>
-          <ul className="grid grid-cols-2 gap-2">
-            {renderVariables()}
-          </ul>
-        </div>
-      )}
-
+      <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} min-h-[80px] flex items-center`}>
+        {problem.text}
+      </div>
       {/* Formula Input Display */}
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} min-h-[80px] flex items-center`}>
         <InlineMath math={latexFormula || '\\text{La tua formula apparirà qui}'} />

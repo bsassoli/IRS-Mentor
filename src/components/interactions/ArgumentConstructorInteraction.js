@@ -48,6 +48,15 @@ const ArgumentConstructorInteraction = ({
       ? problem.solution.map(solution => normalizeInput(solution))
       : [normalizeInput(problem.solution)];
 
+    // Debug output
+    console.group('Solution Check');
+    console.log('User Input (Raw):', latexArgument);
+    console.log('User Input (Normalized):', userSolution);
+    console.log('Correct Answers (Raw):', problem.solution);
+    console.log('Correct Answers (Normalized):', correctAnswers);
+    console.log('Match Found:', correctAnswers.includes(userSolution));
+    console.groupEnd();
+
     if (correctAnswers.includes(userSolution)) {
       onSuccess();
     } else {
@@ -57,44 +66,9 @@ const ArgumentConstructorInteraction = ({
 
   return (
     <div className="space-y-6">
-      {/* Premises and Conclusion Display */}
-      {(problem.premises?.length > 0 || problem.conclusion) && (
-        <div className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'} p-4 rounded-lg`}>
-          {problem.premises?.length > 0 && (
-            <div className="mb-4">
-              <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                Premesse:
-              </h3>
-              <ul className="list-disc list-inside space-y-1">
-                {problem.premises.map((premise, index) => (
-                  <li key={index} className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    {typeof premise === 'string' ? (
-                      <InlineMath math={premise} />
-                    ) : (
-                      'Formato premessa non valido'
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {problem.conclusion && (
-            <div>
-              <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                Conclusione:
-              </h3>
-              <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                <InlineMath math={String(problem.conclusion)} />
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Argument Input Area */}
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} min-h-[80px] flex items-center`}>
-        <InlineMath math={latexArgument || '\\text{Il tuo argomento apparirà qui}'} />
+        <InlineMath math={latexArgument || '\\text{La tua soluzione apparirà qui}'} />
       </div>
 
       {/* Button Grid */}

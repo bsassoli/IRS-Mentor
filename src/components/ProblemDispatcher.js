@@ -36,8 +36,8 @@ const PROBLEM_GROUPS = [
   },
   {
     id: 'argumentConstruction',
-    name: 'Costruzione di Argomentazioni',
-    description: 'Costruisci argomentazioni valide',
+    name: 'Formalizzazione di Argomentazioni',
+    description: 'Formalizza argomentazioni valide',
   },
   {
     id: 'truthTable',
